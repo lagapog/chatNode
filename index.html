@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      #alert { width: 200px; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      body { font: 13px Helvetica, Arial; }
+      .form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      .form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      .form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <button id='alert'>Recibir alerta solo a mí</button>
+    <span>Usuario de id: <b id='userId'></b></span>
+    <ul id='messages'></ul>
+    <div class='form'>
+      <input id='message' autocomplete='off' />
+      <button id='send'>Send</button>
+    </div>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+      // Un id de usuario de ejemplo
+      const userId = prompt('Ingrese un ID. Ejemplo: 666')
+      if (userId) {
+        document.querySelector('#userId').innerHTML = userId
+        const socket = io()
+        const $send = document.querySelector('#send')
+        const $message = document.querySelector('#message')
+        const $messages = document.querySelector('#messages')
+        const $alert = document.querySelector('#alert')
+        // enviamos el id para que se guarde en el servidor
+        socket.on('attachId', cb => cb(userId))
+        socket.on('detachId', cb => cb(userId))
+        //recibir una notificación única
+        $alert.addEventListener('click', () => {
+          socket.emit('alert request', userId)
+        })
+        socket.on('alert unique', msg => {
+          const $li = document.createElement('li')
+          $li.innerHTML = `Mensaje privado: ${msg}`
+          $messages.appendChild($li)
+        })
+        //mandar mensajes
+        $send.addEventListener('click', () => {
+          socket.emit('chat message', $message.value)
+          $message.value = ''
+        })
+        socket.on('emit message', msg => {
+          const $li = document.createElement('li')
+          $li.innerHTML = `Mensaje global: ${msg}`
+          $messages.appendChild($li)
+        })
+      }
+    </script>
+  </body>
+</html>
