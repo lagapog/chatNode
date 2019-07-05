@@ -1,0 +1,29 @@
+{
+  "name": "chatnode",
+  "version": "1.0.0",
+  "description": "chat with express and socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lagapog/chatNode.git"
+  },
+  "keywords": [
+    "chat",
+    "node",
+    "express",
+    "socket"
+  ],
+  "author": "Luis Agapito <luisagapito.g@gmail.com> (http://www.luisagapito.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lagapog/chatNode/issues"
+  },
+  "homepage": "https://github.com/lagapog/chatNode#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  }
+}
